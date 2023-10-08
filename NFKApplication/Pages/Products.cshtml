@@ -5,21 +5,18 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>All products.</p>
-
 <div class="container mt-5">
     <div class="row">
         @foreach (var product in Model.Products)
         {
             <div class="col-md-3 mb-4">
                 <div class="card">
-                    <a href="/Product/Details/@product.Sku">
+                    <a href="/Products/Details/@product.Sku">
                         <img src="@product.ImagePath" alt="@product.Name" class="card-img-top">
                     </a>
                     <div class="card-body">
                         <h5 class="card-title">
-                            <!-- Linking the product name to the product details page -->
-                            <a href="/Product/Details/@product.Sku">@product.Name</a>
+                            <a href="/Products/Details/@product.Sku">@product.Name</a>
                         </h5>
                     </div>
                 </div>
@@ -28,22 +25,3 @@
     </div>
 </div>
 
-@*<script>
-    $(document).ready(function () {
-        $.get("/api/product", function (data) {
-            $.each(data, function (index, product) {
-                let productCard = `
-                    <div class="col-md-3 mb-4">
-                        <div class="card">
-                                    <img src="${product.ImagePath}" alt="${product.Name}" class="card-img-top">
-                            <div class="card-body">
-                                    <h5 class="card-title">${product.Name}</h5>
-                            </div>
-                        </div>
-                    </div>
-                `;
-                $(".row").append(productCard);
-            });
-        });
-    });
-</script>*@

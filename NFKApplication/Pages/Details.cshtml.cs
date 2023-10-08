@@ -18,12 +18,20 @@ namespace NFKApplication.Pages
 
         public IActionResult OnGet(string sku)
         {
-            Product = _productRepository.Get(sku);
+            var dbProduct = _productRepository.Get(sku);
 
             if (Product == null)
             {
                 return NotFound();
             }
+
+            Product = new Product()
+            {
+                Name = dbProduct.Name,
+                ImagePath = "images/" + dbProduct.ImagePath,
+                Price = dbProduct.Price,
+                Sku = dbProduct.Sku,
+            };
 
             return Page();
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NFKApplication.Database.Models;
 using NFKApplication.Models;
 
 namespace NFKApplication.Database
@@ -12,6 +13,7 @@ namespace NFKApplication.Database
         }
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<BasketDto> Baskets { get; set; }
 
         // Additional DbSet properties for other entities can be added here.
     }

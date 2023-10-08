@@ -1,4 +1,47 @@
-﻿@page "/Product/Details/{sku}"
+﻿@page "/Products/Details/{sku}"
 @model NFKApplication.Pages.DetailsModel
 @{
 }
+
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="~/@Model.Product.ImagePath" alt="@Model.Product.Name" class="img-fluid">
+        </div>
+        <div class="col-md-6">
+            <h2>@Model.Product.Name</h2>
+            <p class="text-muted">SKU: @Model.Product.Sku</p>
+            <h4 class="text-primary">$@Model.Product.Price</h4>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            </p>
+            <button class="btn btn-primary">Add to Cart</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelector('.btn-primary').addEventListener('click', function () {
+        fetch('@Url.Content("~/api/Basket/AddToBasket")', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                sku: @Model.Product.Sku
+                })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data) {
+                    // Handle success, maybe show a notification
+                    alert('Product added to cart!');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    });
+</script>

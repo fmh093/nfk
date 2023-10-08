@@ -16,6 +16,13 @@ namespace NFKApplication
             builder.Services.AddControllers();
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(PathHelper.DatabaseConnectionString));
 
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 
@@ -29,6 +36,7 @@ namespace NFKApplication
                 app.UseHsts();
             }
             app.UseRouting();
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
@@ -58,7 +66,7 @@ namespace NFKApplication
         private static void InitializeDatabase()
         {
             // Comment the line below to reset the data in the database. Don't forget to re-add it once you've reset it.
-            //if (IsDatabaseInitialized()) return;
+            if (IsDatabaseInitialized()) return;
 
             using var connection = new SQLiteConnection(PathHelper.DatabaseConnectionString);
             connection.Open();
@@ -67,11 +75,12 @@ namespace NFKApplication
             var initializeQuery = @"                        
                 DELETE FROM Products;                 
                 DELETE FROM Configuration;
+                DELETE FROM Baskets;
                 VACUUM;
 
                 INSERT INTO Products (Sku, Name, Price, ImagePath)
                 VALUES 
-                ('7881944', 'Wolf', 29.99, '7881928-p.png'),
+                ('7881928', 'Wolf', 29.99, '7881928-p.png'),
                 ('7881931', 'Elegant', 39.99, '7881931-p.png'),
                 ('7881944', 'Safe', 19.99, '7881944-p.png');
 

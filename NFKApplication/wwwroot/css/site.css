@@ -13,6 +13,63 @@ html {
   min-height: 100%;
 }
 
-body {
+/*body {
   margin-bottom: 60px;
+}*/
+
+/* General Styles */
+body {
+    font-family: 'Calibri', sans-serif; 
+    background-color: #FAFAFA; 
+    color: #333; 
+    line-height: 1.6; 
+    margin: 0;
+    padding: 0;
 }
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0; 
+}
+
+/* Main Heading Styles */
+.display-4 {
+    color: #D32F2F;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Highlighted Text Styles */
+.bold-red {
+    font-weight: bold;
+    color: #D32F2F;
+}
+
+.green {
+    color: #388E3C;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.navbar {
+    background-color: #FFF;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-primary {
+    background-color: #D32F2F;
+    color: #FFF;
+    border: none;
+}
+
+    .btn-primary:hover {
+        background-color: #B71C1C;
+        color: #FFF;
+    }
