@@ -1,0 +1,35 @@
+﻿@page
+@model NFKApplication.Pages.BasketsModel
+@{
+    ViewData["Title"] = "Basket";
+}
+
+
+<div class="container mt-5">
+    <h2>Your basket</h2>
+
+    @if (Model.Basket.LineItems.Count == 0)
+    {
+        <p>Your basket is empty.</p>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>SKU</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Basket.LineItems)
+                {
+                    <tr>
+                        <td>@item.Sku</td>
+                        <td>@item.Amount</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>

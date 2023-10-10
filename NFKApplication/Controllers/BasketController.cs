@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NFKApplication.Database;
 using NFKApplication.Database.Models;
 using NFKApplication.Models;
+using NFKApplication.Services;
 using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -14,62 +16,51 @@ namespace NFKApplication.Controllers
     {
 
         private readonly IBasketRepository _basketRepository;
-        public BasketController(IBasketRepository basketRepository)
+        private readonly IBasketService _basketService;
+        public BasketController(IBasketRepository basketRepository, IBasketService basketService)
         {
             _basketRepository = basketRepository;
+            _basketService = basketService;
         }
 
-        // GET: api/<ValuesController>
-        [HttpGet]
-        public IActionResult Get(int id)
+        [HttpGet("GetBasket")]
+        public IActionResult GetBasket()
         {
-            var basketFound = _basketRepository.TryGetBasket(id, out var basket);
-            if (!basketFound)
-            {
-                return NotFound();
-            }
-
+            // todo implement add to basket on product details page
+            var basket = _basketService.GetBasket(HttpContext);
             return Ok(basket);
         }
-
-        // GET api/<ValuesController>/5
-        //[HttpGet("{sku}")]
-        //public string Get(string sku)
-        //{
-        //    return "value";
-        //}
 
         [HttpPost("AddToBasket")]
         public IActionResult AddToBasket([FromBody] AddToBasketRequest request)
         {
+            // todo find a smarter way to ensure that basket exists and create it if it doesn't
             var basket = _basketRepository.AddToBasket(request.BasketId, request.Sku, request.Amount);
             if (basket == null)
             {
                 return NotFound();
             }
 
-            return value == null ? default(T) : JsonSerializer.Deserialize<BasketDto>(value);
-
             return Ok(basket);
+        }
+
+        [HttpPost("SaveBasket")]
+        public IActionResult SaveBasket([FromBody] Basket updatedBasket)
+        {
+            if (updatedBasket == null)
+            {
+                return BadRequest();
+            }
+            _basketRepository.SaveBasket(updatedBasket);
+
+            return NoContent();
         }
 
         public class AddToBasketRequest
         {
             public int BasketId { get; set; }
-            public string Sku { get; set; }
-            public int Amount { get; set; }
-        }
-
-        // PUT api/<ValuesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<ValuesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            public string Sku { get; set; } = string.Empty;
+            public int Amount { get; set; } = 1;
         }
     }
 }

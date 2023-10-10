@@ -2,6 +2,7 @@ using Dapper;
 using NFKApplication.Database;
 using System.Data.SQLite;
 using Microsoft.EntityFrameworkCore;
+using NFKApplication.Services;
 
 namespace NFKApplication
 {
@@ -24,6 +25,8 @@ namespace NFKApplication
             });
 
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+            builder.Services.AddScoped<IBasketService, BasketService>();
 
 
             var app = builder.Build();
