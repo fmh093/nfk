@@ -15,7 +15,7 @@ namespace NFKApplication.Database
 
         public Product Get(string sku)
         {
-            return _context.Products.First(p => p.Sku == int.Parse(sku));
+            return _context.Products.First(p => p.Sku == sku);
         }
 
         public List<Product> GetAll()

@@ -34,33 +34,44 @@ namespace NFKApplication.Controllers
         [HttpPost("AddToBasket")]
         public IActionResult AddToBasket([FromBody] AddToBasketRequest request)
         {
-            // todo find a smarter way to ensure that basket exists and create it if it doesn't
-            var basket = _basketRepository.AddToBasket(request.BasketId, request.Sku, request.Amount);
+            var basket = _basketService.GetBasket(HttpContext);
             if (basket == null)
             {
                 return NotFound();
             }
+            basket = _basketRepository.AddToBasket(basket.Id, request.Sku, request.Amount);
 
             return Ok(basket);
         }
 
-        [HttpPost("SaveBasket")]
-        public IActionResult SaveBasket([FromBody] Basket updatedBasket)
+        [HttpPost("UpdateBasketInformation")]
+        public IActionResult UpdateBasketInformation([FromBody] UpdateBasketInformationRequest updateBasketInformationRequest)
         {
-            if (updatedBasket == null)
+            var basket = _basketService.GetBasket(HttpContext);
+            if (basket == null)
             {
                 return BadRequest();
             }
-            _basketRepository.SaveBasket(updatedBasket);
+            basket.FirstName = updateBasketInformationRequest.FirstName;
+            basket.LastName = updateBasketInformationRequest.LastName;
+            basket.Address = updateBasketInformationRequest.Address;
+
+            _basketRepository.UpdateBasket(basket);
 
             return NoContent();
         }
 
+
         public class AddToBasketRequest
         {
-            public int BasketId { get; set; }
             public string Sku { get; set; } = string.Empty;
             public int Amount { get; set; } = 1;
+        }
+        public class UpdateBasketInformationRequest
+        {
+            public string FirstName { get; set; } = string.Empty;
+            public string LastName { get; set; } = string.Empty;
+            public string Address { get; set; } = string.Empty;
         }
     }
 }

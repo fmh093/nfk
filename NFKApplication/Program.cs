@@ -15,7 +15,10 @@ namespace NFKApplication
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddControllers();
-            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(PathHelper.DatabaseConnectionString));
+            builder.Services.AddDbContext<AppDbContext>(options => options
+                .UseSqlite(PathHelper.DatabaseConnectionString)
+                .EnableSensitiveDataLogging()
+            );
 
             builder.Services.AddSession(options =>
             {
@@ -69,7 +72,7 @@ namespace NFKApplication
         private static void InitializeDatabase()
         {
             // Comment the line below to reset the data in the database. Don't forget to re-add it once you've reset it.
-            if (IsDatabaseInitialized()) return;
+            //if (IsDatabaseInitialized()) return;
 
             using var connection = new SQLiteConnection(PathHelper.DatabaseConnectionString);
             connection.Open();

@@ -9,6 +9,7 @@ namespace NFKApplication.Models
         [Key]
         public int Id { get; set; }
         public List<LineItem> LineItems { get; set; } = new List<LineItem>();
+        public bool? IsCompleted { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
@@ -18,7 +19,11 @@ namespace NFKApplication.Models
             return new Basket
             {
                 Id = dbBasket.Id,
-                LineItems = JsonSerializer.Deserialize<List<LineItem>>(dbBasket.LineItemsJson)
+                LineItems = JsonSerializer.Deserialize<List<LineItem>>(dbBasket.LineItemsJson),
+                IsCompleted = Convert.ToBoolean(dbBasket.IsCompleted),
+                FirstName = dbBasket.FirstName,
+                LastName = dbBasket.LastName,
+                Address = dbBasket.Address
             };
         }
     }

@@ -73,3 +73,13 @@ h1, h2, h3, h4, h5, h6 {
         background-color: #B71C1C;
         color: #FFF;
     }
+
+.highlight {
+    background-color: #FFD700; /* Golden color */
+    color: #D2691E; /* Chocolate color for contrast */
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+    margin: 0 5px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+}

@@ -6,13 +6,13 @@ using NFKApplication.Services;
 
 namespace NFKApplication.Pages
 {
-    public class BasketsModel : PageModel
+    public class CheckoutModel : PageModel
     {
         public Basket Basket { get; set; } = new Basket();
 
         private readonly IBasketService _basketService;
 
-        public BasketsModel(IBasketService basketService)
+        public CheckoutModel(IBasketService basketService)
         {
             _basketService = basketService;
         }

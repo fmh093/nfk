@@ -9,6 +9,7 @@ namespace NFKApplication.Database.Models
         [Key]
         public int Id { get; set; }
         public string? LineItemsJson { get; set; }
+        public int IsCompleted { get; set; } = 0;
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
@@ -18,7 +19,11 @@ namespace NFKApplication.Database.Models
             return new BasketDto
             {
                 Id = basket.Id,
-                LineItemsJson = JsonSerializer.Serialize(basket.LineItems)
+                LineItemsJson = JsonSerializer.Serialize(basket.LineItems),
+                IsCompleted = Convert.ToInt32(basket.IsCompleted),
+                FirstName = basket.FirstName,
+                LastName = basket.LastName,
+                Address = basket.Address
             };
         }
     }

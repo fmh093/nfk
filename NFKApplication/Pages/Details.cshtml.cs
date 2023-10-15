@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using NFKApplication.Database;
 using NFKApplication.Models;
+using NFKApplication.Services;
 
 namespace NFKApplication.Pages
 {
@@ -10,14 +11,18 @@ namespace NFKApplication.Pages
         public Product Product { get; set; } = new Product();
 
         private readonly IProductRepository _productRepository;
+        private readonly IBasketService _basketService;
 
-        public DetailsModel(IProductRepository productRepository)
+        public DetailsModel(IProductRepository productRepository, IBasketService basketService)
         {
             _productRepository = productRepository;
+            _basketService = basketService;
         }
 
         public IActionResult OnGet(string sku)
         {
+            _ = _basketService.GetBasket(HttpContext); // ensure basket
+
             var dbProduct = _productRepository.Get(sku);
 
             if (Product == null)
