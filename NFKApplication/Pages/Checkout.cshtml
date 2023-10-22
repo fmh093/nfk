@@ -65,7 +65,7 @@
 
                 // Simulate 2 seconds delay for processing payment
                 setTimeout(function () {
-                    window.location.href = '/Receipt';
+                    window.location.href = '/Receipt?basketId=' + @Model.Basket.Id;
                 }, 2000);
             } else {
                 console.error('Error updating basket information');

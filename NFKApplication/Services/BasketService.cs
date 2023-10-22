@@ -34,19 +34,30 @@ namespace NFKApplication.Services
         public Basket GetBasket(HttpContext context)
         {
             var basketId = GetOrSetBasketId(context);
+            return GetBasket(basketId);
+        }
+
+        public Basket GetBasket(int basketId)
+        {
             return _basketRepository.GetOrCreateBasket(basketId);
         }
 
-        public void CompleteCheckout(HttpContext context)
+        public void CompleteCheckout(HttpContext context, int basketId)
         {
-            var basketId = GetOrSetBasketId(context);
             _basketRepository.CompleteBasket(basketId);
+            ClearBasket(context);
+        }
+
+        private void ClearBasket(HttpContext context)
+        {
+            context.Response.Cookies.Delete("BasketId");
         }
     }
 
     public interface IBasketService
     {
         Basket GetBasket(HttpContext context);
-        void CompleteCheckout(HttpContext context);
+        Basket GetBasket(int basketId);
+        void CompleteCheckout(HttpContext context, int basketId);
     }
 }

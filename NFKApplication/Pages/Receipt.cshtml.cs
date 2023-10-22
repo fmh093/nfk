@@ -17,10 +17,10 @@ namespace NFKApplication.Pages
             _basketService = basketService;
         }
 
-        public IActionResult OnGet()
+        public IActionResult OnGet(int basketId)
         {
-            _basketService.CompleteCheckout(HttpContext);
-            Basket = _basketService.GetBasket(HttpContext);
+            Basket = _basketService.GetBasket(basketId);
+            _basketService.CompleteCheckout(HttpContext, basketId);
             return Page();
         }
     }
