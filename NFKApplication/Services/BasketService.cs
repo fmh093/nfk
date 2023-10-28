@@ -6,13 +6,17 @@ namespace NFKApplication.Services
     public class BasketService : IBasketService
     {
         private readonly IBasketRepository _basketRepository;
-        public BasketService(IBasketRepository basketRepository)
+        private readonly ILogger<IBasketService> _logger;
+        public BasketService(IBasketRepository basketRepository, ILogger<IBasketService> logger)
         {
             _basketRepository = basketRepository;
+            _logger = logger;
         }
 
         private int GetOrSetBasketId(HttpContext context)
         {
+            // todo add logging interface to admin login
+            // todo get admin login from db instead of hardcode
             if (context.Request.Cookies.ContainsKey("BasketId"))
             {
                 if (int.TryParse(context.Request.Cookies["BasketId"], out var id))

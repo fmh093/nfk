@@ -3,6 +3,10 @@ using NFKApplication.Database;
 using System.Data.SQLite;
 using Microsoft.EntityFrameworkCore;
 using NFKApplication.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Serilog;
 
 namespace NFKApplication
 {
@@ -10,15 +14,22 @@ namespace NFKApplication
     {
         public static void Main(string[] args)
         {
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddControllers();
+            builder.Services.AddHttpClient();
             builder.Services.AddDbContext<AppDbContext>(options => options
                 .UseSqlite(PathHelper.DatabaseConnectionString)
                 .EnableSensitiveDataLogging()
             );
+
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.SQLite(PathHelper.DatabasePath)
+                .CreateLogger();
+            builder.Logging.AddSerilog();
 
             builder.Services.AddSession(options =>
             {
@@ -31,6 +42,20 @@ namespace NFKApplication
             builder.Services.AddScoped<IBasketRepository, BasketRepository>();
             builder.Services.AddScoped<IBasketService, BasketService>();
 
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidIssuer = "https://localhost:7282/",
+                        ValidAudience = "https://localhost:7282/",
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("BALAJFMCAOSPDJA198VNAOCP91AVZOLB1PPANDl1NAV99KL"))
+                    };
+                });
 
             var app = builder.Build();
 
@@ -44,6 +69,13 @@ namespace NFKApplication
             app.UseRouting();
             app.UseSession();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseCors(builder => builder
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowAnyOrigin()
+            );
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -57,8 +89,6 @@ namespace NFKApplication
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.MapRazorPages();
 
