@@ -112,6 +112,7 @@ namespace NFKApplication
                 DELETE FROM Products;                 
                 DELETE FROM Configuration;
                 DELETE FROM Baskets;
+                DELETE FROM Logs;
                 VACUUM;
 
                 INSERT INTO Products (Sku, Name, Price, ImagePath)
