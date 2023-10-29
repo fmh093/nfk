@@ -41,6 +41,9 @@ namespace NFKApplication
             builder.Services.AddScoped<IProductRepository, ProductRepository>();
             builder.Services.AddScoped<IBasketRepository, BasketRepository>();
             builder.Services.AddScoped<IBasketService, BasketService>();
+            builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<ILogRepository, LogRepository>();
 
             builder.Services.AddAuthentication(options =>
             {
@@ -55,7 +58,19 @@ namespace NFKApplication
                         ValidAudience = "https://localhost:7282/",
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("BALAJFMCAOSPDJA198VNAOCP91AVZOLB1PPANDl1NAV99KL"))
                     };
+                    options.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            if (context.Request.Cookies.ContainsKey("auth"))
+                            {
+                                context.Token = context.Request.Cookies["auth"];
+                            }
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
+
 
             var app = builder.Build();
 

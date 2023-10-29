@@ -1,11 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using NFKApplication.Database;
-using NFKApplication.Database.Models;
-using NFKApplication.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using NFKApplication.Services;
-using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,18 +10,15 @@ namespace NFKApplication.Controllers
     public class BasketController : ControllerBase
     {
 
-        private readonly IBasketRepository _basketRepository;
         private readonly IBasketService _basketService;
-        public BasketController(IBasketRepository basketRepository, IBasketService basketService)
+        public BasketController(IBasketService basketService)
         {
-            _basketRepository = basketRepository;
             _basketService = basketService;
         }
 
         [HttpGet("GetBasket")]
         public IActionResult GetBasket()
         {
-            // todo implement add to basket on product details page
             var basket = _basketService.GetBasket(HttpContext);
             return Ok(basket);
         }
@@ -40,7 +31,7 @@ namespace NFKApplication.Controllers
             {
                 return NotFound();
             }
-            basket = _basketRepository.AddToBasket(basket.Id, request.Sku, request.Amount);
+            basket = _basketService.AddToBasket(basket.Id, request.Sku, request.Amount);
 
             return Ok(basket);
         }
@@ -57,7 +48,7 @@ namespace NFKApplication.Controllers
             basket.LastName = updateBasketInformationRequest.LastName;
             basket.Address = updateBasketInformationRequest.Address;
 
-            _basketRepository.UpdateBasket(basket);
+            _basketService.UpdateBasket(basket);
 
             return NoContent();
         }

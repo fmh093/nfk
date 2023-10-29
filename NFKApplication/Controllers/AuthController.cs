@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using NFKApplication.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 
 namespace NFKApplication.Controllers
 {
@@ -11,17 +13,23 @@ namespace NFKApplication.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        // Constructor and other methods can be added here
+        private readonly IAuthService _authService;
+        private readonly ILogger<AuthController> _logger;
+
+        public AuthController(IAuthService authService, ILogger<AuthController> logger)
+        {
+            _authService = authService;
+            _logger = logger;
+        }
 
         [HttpPost("login")]
-        public IActionResult Login([FromForm] UserLoginDto userLogin)
+        public IActionResult Login([FromForm] UserLoginDto info)
         {
-            // Replace with your own validation
-            if (userLogin.Username == "admin" && userLogin.Password == "password")
+            if (_authService.TryValidate(info.Username, info.Password, out var message))
             {
                 var claims = new[]
                 {
-                    new Claim(ClaimTypes.Name, userLogin.Username)
+                    new Claim(ClaimTypes.Name, info.Username)
                 };
 
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("BALAJFMCAOSPDJA198VNAOCP91AVZOLB1PPANDl1NAV99KL"));
@@ -31,7 +39,7 @@ namespace NFKApplication.Controllers
                     issuer: "https://localhost:7282/",
                     audience: "https://localhost:7282/",
                     claims: claims,
-                    expires: DateTime.Now.AddMinutes(30),
+                    expires: DateTime.Now.AddHours(24),
                     signingCredentials: creds
                 );
 
@@ -43,12 +51,14 @@ namespace NFKApplication.Controllers
                     {
                         Secure = true,
                         SameSite = SameSiteMode.None,
-                        Expires = DateTimeOffset.MaxValue
+                        Expires = DateTimeOffset.UtcNow.AddHours(24)
                     }
                 );
 
-                return Ok(new { success = true });
+                return RedirectToPage("/Index");
             }
+
+            _logger.LogWarning($"Login attempt failed. {JsonSerializer.Serialize(info)} Message: {message}");
 
             return Unauthorized();
         }

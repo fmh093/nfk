@@ -1,0 +1,30 @@
+﻿@page
+@model NFKApplication.Pages.LogOverviewModel
+
+<h2>Log Overview</h2>
+<p>Here are the latest 50 logs from the database:</p>
+
+<div class="container mt-5">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Level</th>
+                <th>Timestamp</th>
+                <th>Message</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var log in Model.Logs)
+            {
+                <tr>
+                    <td>@log.Id</td>
+                    <td>@log.Level</td>
+                    <td>@log.Timestamp</td>
+                    <td>@Html.Raw(@log.Message)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

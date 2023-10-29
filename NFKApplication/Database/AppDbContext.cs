@@ -14,6 +14,8 @@ namespace NFKApplication.Database
 
         public DbSet<Product> Products { get; set; }
         public DbSet<BasketDto> Baskets { get; set; }
+        public DbSet<AdminUser> AdminUsers { get; set; }
+        public DbSet<LogEntryDto> Logs { get; set; }
 
         // Additional DbSet properties for other entities can be added here.
     }

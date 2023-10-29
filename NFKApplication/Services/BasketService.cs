@@ -46,6 +46,16 @@ namespace NFKApplication.Services
             return _basketRepository.GetOrCreateBasket(basketId);
         }
 
+        public Basket AddToBasket(int basketId, string sku, int amount)
+        {
+            return _basketRepository.AddToBasket(basketId, sku, amount);
+        }
+
+        public void UpdateBasket(Basket basket)
+        {
+            _basketRepository.UpdateBasket(basket);
+        }
+
         public void CompleteCheckout(HttpContext context, int basketId)
         {
             _basketRepository.CompleteBasket(basketId);
@@ -62,6 +72,8 @@ namespace NFKApplication.Services
     {
         Basket GetBasket(HttpContext context);
         Basket GetBasket(int basketId);
+        Basket AddToBasket(int basketId, string sku, int amount);
+        void UpdateBasket(Basket basket);
         void CompleteCheckout(HttpContext context, int basketId);
     }
 }
