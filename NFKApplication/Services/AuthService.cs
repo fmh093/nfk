@@ -13,10 +13,16 @@ namespace NFKApplication.Services
         {
             return _authRepository.VerifyUser(username, password, out message);
         }
+
+        public void Logout(HttpContext context)
+        {
+            context.Response.Cookies.Delete("auth");
+        }
     }
 
     public interface IAuthService
     {
         bool TryValidate(string username, string password, out string message);
+        void Logout(HttpContext context);
     }
 }

@@ -1,0 +1,20 @@
+﻿@page
+@model NFKApplication.Pages.LogoutModel
+@{
+    ViewData["Title"] = "Logout";
+}
+
+<div id="loading" style="display:none;">
+    <h1>Logging out..</h1>
+</div>
+
+
+<script>
+    // Show loading animation
+    document.getElementById('loading').style.display = 'block';
+
+    // Simulate 2 seconds delay for processing payment
+    setTimeout(function () {
+        window.location.href = '/Index';
+    }, 1000);
+</script>

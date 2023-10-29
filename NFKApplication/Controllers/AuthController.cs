@@ -23,44 +23,43 @@ namespace NFKApplication.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromForm] UserLoginDto info)
+        public IActionResult Login([FromBody] UserLoginDto info)
         {
-            if (_authService.TryValidate(info.Username, info.Password, out var message))
+            if (!_authService.TryValidate(info.Username, info.Password, out var message))
             {
-                var claims = new[]
-                {
+                _logger.LogWarning($"Login attempt failed. {JsonSerializer.Serialize(info)} Message: {message}");
+                return Unauthorized();
+            }
+
+            var claims = new[]
+            {
                     new Claim(ClaimTypes.Name, info.Username)
                 };
 
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("BALAJFMCAOSPDJA198VNAOCP91AVZOLB1PPANDl1NAV99KL"));
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("BALAJFMCAOSPDJA198VNAOCP91AVZOLB1PPANDl1NAV99KL"));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-                var token = new JwtSecurityToken(
-                    issuer: "https://localhost:7282/",
-                    audience: "https://localhost:7282/",
-                    claims: claims,
-                    expires: DateTime.Now.AddHours(24),
-                    signingCredentials: creds
-                );
+            var token = new JwtSecurityToken(
+                issuer: "https://localhost:7282/",
+                audience: "https://localhost:7282/",
+                claims: claims,
+                expires: DateTime.Now.AddHours(24),
+                signingCredentials: creds
+            );
 
-                var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
-                Response.Cookies.Append(
-                    "auth",
-                    jwtToken,
-                    new CookieOptions
-                    {
-                        Secure = true,
-                        SameSite = SameSiteMode.None,
-                        Expires = DateTimeOffset.UtcNow.AddHours(24)
-                    }
-                );
+            var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+            Response.Cookies.Append(
+                "auth",
+                jwtToken,
+                new CookieOptions
+                {
+                    Secure = true,
+                    SameSite = SameSiteMode.None,
+                    Expires = DateTimeOffset.UtcNow.AddHours(24)
+                }
+            );
 
-                return RedirectToPage("/Index");
-            }
-
-            _logger.LogWarning($"Login attempt failed. {JsonSerializer.Serialize(info)} Message: {message}");
-
-            return Unauthorized();
+            return RedirectToPage("/Index");
         }
     }
     public class UserLoginDto
