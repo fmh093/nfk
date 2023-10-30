@@ -15,13 +15,16 @@ namespace NFKApplication.Database
 
         public Product Get(string sku)
         {
-            return _context.Products.First(p => p.Sku == sku);
+            return _context.Products
+                        .FromSqlRaw($"SELECT * FROM Products WHERE Sku = '{sku}'")
+                        .First();
         }
 
         public List<Product> GetAll()
         {
-            var products = _context.Products.ToList();
-            return products;
+            return _context.Products
+                        .FromSqlRaw("SELECT * FROM Products")
+                        .ToList();
         }
     }
 

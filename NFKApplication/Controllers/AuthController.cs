@@ -25,10 +25,17 @@ namespace NFKApplication.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] UserLoginDto info)
         {
-            if (!_authService.TryValidate(info.Username, info.Password, out var message))
+            try
             {
-                _logger.LogWarning($"Login attempt failed. {JsonSerializer.Serialize(info)} Message: {message}");
-                return Unauthorized();
+                if (!_authService.TryValidate(info.Username, info.Password, out var message))
+                {
+                    _logger.LogWarning($"Login attempt failed. {JsonSerializer.Serialize(info)} Message: {message}");
+                    return Unauthorized();
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"An error occurred during login");
             }
 
             var claims = new[]

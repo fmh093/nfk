@@ -47,26 +47,66 @@ namespace NFKApplication.Database
             if (basketDto == null)
                 throw new Exception("Basket not found");
 
-            var basket = Basket.MapToBasket(basketDto);
+            // Deserialize the LineItems JSON field to a list of LineItem objects
+            var lineItems = string.IsNullOrEmpty(basketDto.LineItemsJson)
+                            ? new List<LineItem>()
+                            : System.Text.Json.JsonSerializer.Deserialize<List<LineItem>>(basketDto.LineItemsJson);
 
-            var lineItem = basket.LineItems.FirstOrDefault(li => li.Sku == sku);
+            var lineItem = lineItems.FirstOrDefault(li => li.Sku == sku);
             if (lineItem == null)
             {
                 var product = _productRepository.Get(sku);
-                lineItem = new LineItem { Name = product.Name, Price = product.Price, Sku = product.Sku, Amount = amount };
-                basket.LineItems.Add(lineItem);
+                lineItem = new LineItem
+                {
+                    Name = product.Name,
+                    Price = product.Price,
+                    Sku = product.Sku,
+                    Amount = amount
+                };
+                lineItems.Add(lineItem);
             }
             else
             {
                 lineItem.Amount += amount;
             }
 
-            basketDto = BasketDto.MapToBasketDto(basket);
+            // Serialize the list of LineItem objects back to JSON and update the JSON field
+            basketDto.LineItemsJson = System.Text.Json.JsonSerializer.Serialize(lineItems);
+
             _context.Entry(basketDto).State = EntityState.Modified;
             _context.SaveChanges();
 
-            return basket;
+            // Return the updated basket
+            return Basket.MapToBasket(basketDto); // Assuming this method handles deserialization of LineItems
         }
+
+
+        //public Basket AddToBasket(int basketId, string sku, int amount)
+        //{
+        //    var basketDto = _context.Baskets.SingleOrDefault(b => b.Id == basketId);
+        //    if (basketDto == null)
+        //        throw new Exception("Basket not found");
+
+        //    var basket = Basket.MapToBasket(basketDto);
+
+        //    var lineItem = basket.LineItems.FirstOrDefault(li => li.Sku == sku);
+        //    if (lineItem == null)
+        //    {
+        //        var product = _productRepository.Get(sku);
+        //        lineItem = new LineItem { Name = product.Name, Price = product.Price, Sku = product.Sku, Amount = amount };
+        //        basket.LineItems.Add(lineItem);
+        //    }
+        //    else
+        //    {
+        //        lineItem.Amount += amount;
+        //    }
+
+        //    basketDto = BasketDto.MapToBasketDto(basket);
+        //    _context.Entry(basketDto).State = EntityState.Modified;
+        //    _context.SaveChanges();
+
+        //    return basket;
+        //}
 
         public Basket CreateBasket(int id)
         {
@@ -84,8 +124,6 @@ namespace NFKApplication.Database
                 return; // throw?
 
             var mappedBasketDto = BasketDto.MapToBasketDto(basket);
-
-            //var existingBasket = _context.Baskets.Find(basket.Id);
 
             _context.Entry(basketDto).CurrentValues.SetValues(mappedBasketDto);
 

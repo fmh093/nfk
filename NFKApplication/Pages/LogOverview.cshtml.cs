@@ -9,7 +9,6 @@ using System.Text.RegularExpressions;
 
 namespace NFKApplication.Pages
 {
-    [Authorize]
     public class LogOverviewModel : PageModel
     {
         public List<Log> Logs { get; set; } = new List<Log>();

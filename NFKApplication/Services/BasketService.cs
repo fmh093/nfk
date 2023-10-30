@@ -59,6 +59,7 @@ namespace NFKApplication.Services
         public void CompleteCheckout(HttpContext context, int basketId)
         {
             _basketRepository.CompleteBasket(basketId);
+            // todo send basket to erp system
             ClearBasket(context);
         }
 
