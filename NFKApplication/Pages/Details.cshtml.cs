@@ -23,6 +23,8 @@ namespace NFKApplication.Pages
         {
             _ = _basketService.GetBasket(HttpContext); // ensure basket
 
+            if(sku.ToLowerInvariant() == PathHelper.SecretMatSku) return NotFound();
+
             var dbProduct = _productRepository.Get(sku);
 
             if (Product == null)

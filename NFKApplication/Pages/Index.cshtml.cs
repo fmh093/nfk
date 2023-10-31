@@ -1,20 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using NFKApplication.Database;
 
 namespace NFKApplication.Pages
 {
     public class IndexModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
-
-        public IndexModel(ILogger<IndexModel> logger)
+        public string LogoPath = string.Empty;
+        public IndexModel()
         {
-            _logger = logger;
         }
 
         public void OnGet()
         {
-
+            LogoPath = PathHelper.ImagesPath;
         }
     }
 }

@@ -18,7 +18,6 @@ namespace NFKApplication
 
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
             builder.Services.AddRazorPages(options => 
             {
                 options.Conventions.ConfigureFilter(new IgnoreAntiforgeryTokenAttribute());
@@ -97,7 +96,6 @@ namespace NFKApplication
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-                // Add more route mappings for other controllers as needed
             });
 
 
@@ -124,7 +122,7 @@ namespace NFKApplication
             connection.Open();
 
 
-            var initializeQuery = @"                        
+            var initializeQuery = $@"                        
                 DELETE FROM Products;                 
                 DELETE FROM Configuration;
                 DELETE FROM Baskets;
@@ -135,7 +133,8 @@ namespace NFKApplication
                 VALUES 
                 ('7881928', 'Wolf', 29.99, '7881928-p.png'),
                 ('7881931', 'Elegant', 39.99, '7881931-p.png'),
-                ('7881944', 'Safe', 19.99, '7881944-p.png');
+                ('7881944', 'Safe', 19.99, '7881944-p.png'),
+                ('{PathHelper.SecretMatSku}', 'Secret Mat', 199.99, '7881955-p.png');
 
                 INSERT INTO Configuration (Initialized) VALUES (1);";
 

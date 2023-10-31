@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using NFKApplication.Extensions;
 using NFKApplication.Models;
 
 namespace NFKApplication.Database
@@ -15,6 +16,9 @@ namespace NFKApplication.Database
 
         public Product Get(string sku)
         {
+            if (!sku.IsValidString())
+                throw new Exception("That's not allowed");
+
             return _context.Products
                         .FromSqlRaw($"SELECT * FROM Products WHERE Sku = '{sku}'")
                         .First();
@@ -23,7 +27,7 @@ namespace NFKApplication.Database
         public List<Product> GetAll()
         {
             return _context.Products
-                        .FromSqlRaw("SELECT * FROM Products")
+                        .FromSqlRaw($"SELECT * FROM Products WHERE Sku != '{PathHelper.SecretMatSku}'")
                         .ToList();
         }
     }

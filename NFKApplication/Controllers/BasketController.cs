@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NFKApplication.Services;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace NFKApplication.Controllers
 {
     [Route("api/[controller]")]
@@ -51,6 +49,14 @@ namespace NFKApplication.Controllers
             _basketService.UpdateBasket(basket);
 
             return NoContent();
+        }
+
+        [HttpGet("GetImage")]
+        public IActionResult FetchImage(string imageUrl)
+        {
+            using var client = new HttpClient();
+            var imageBytes = client.GetByteArrayAsync(imageUrl).Result;
+            return File(imageBytes, "image/jpeg");
         }
 
 

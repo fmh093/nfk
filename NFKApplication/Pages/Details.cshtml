@@ -48,35 +48,6 @@
             });
     });
 
-    // document.querySelector('.btn-primary').addEventListener('click', function () {
-    //     const token = getCookie('auth'); // replace with the name of your cookie holding the JWT token
-
-    //     fetch('@Url.Content("~/api/Basket/AddToBasket")', {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //             'Authorization': `Bearer ${token}`
-    //         },
-    //         body: JSON.stringify({
-    //             sku: '@Model.Product.Sku',
-    //             amount: 1,
-    //         })
-    //     })
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             if (data) {
-    //                 document.getElementById('success-label').style.display = 'block';
-    //             }
-    //         })
-    //         .catch(error => {
-    //             console.error('Error:', error);
-    //         });
-    // });
-
-
-
-
-
     function getCookie(name) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);

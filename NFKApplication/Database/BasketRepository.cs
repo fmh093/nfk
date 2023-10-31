@@ -47,7 +47,6 @@ namespace NFKApplication.Database
             if (basketDto == null)
                 throw new Exception("Basket not found");
 
-            // Deserialize the LineItems JSON field to a list of LineItem objects
             var lineItems = string.IsNullOrEmpty(basketDto.LineItemsJson)
                             ? new List<LineItem>()
                             : System.Text.Json.JsonSerializer.Deserialize<List<LineItem>>(basketDto.LineItemsJson);
@@ -70,43 +69,13 @@ namespace NFKApplication.Database
                 lineItem.Amount += amount;
             }
 
-            // Serialize the list of LineItem objects back to JSON and update the JSON field
             basketDto.LineItemsJson = System.Text.Json.JsonSerializer.Serialize(lineItems);
 
             _context.Entry(basketDto).State = EntityState.Modified;
             _context.SaveChanges();
 
-            // Return the updated basket
-            return Basket.MapToBasket(basketDto); // Assuming this method handles deserialization of LineItems
+            return Basket.MapToBasket(basketDto);
         }
-
-
-        //public Basket AddToBasket(int basketId, string sku, int amount)
-        //{
-        //    var basketDto = _context.Baskets.SingleOrDefault(b => b.Id == basketId);
-        //    if (basketDto == null)
-        //        throw new Exception("Basket not found");
-
-        //    var basket = Basket.MapToBasket(basketDto);
-
-        //    var lineItem = basket.LineItems.FirstOrDefault(li => li.Sku == sku);
-        //    if (lineItem == null)
-        //    {
-        //        var product = _productRepository.Get(sku);
-        //        lineItem = new LineItem { Name = product.Name, Price = product.Price, Sku = product.Sku, Amount = amount };
-        //        basket.LineItems.Add(lineItem);
-        //    }
-        //    else
-        //    {
-        //        lineItem.Amount += amount;
-        //    }
-
-        //    basketDto = BasketDto.MapToBasketDto(basket);
-        //    _context.Entry(basketDto).State = EntityState.Modified;
-        //    _context.SaveChanges();
-
-        //    return basket;
-        //}
 
         public Basket CreateBasket(int id)
         {
