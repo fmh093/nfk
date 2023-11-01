@@ -116,7 +116,7 @@ namespace NFKApplication
         private static void InitializeDatabase()
         {
             // Comment the line below to reset the data in the database. Don't forget to re-add it once you've reset it.
-            //if (IsDatabaseInitialized()) return;
+            if (IsDatabaseInitialized()) return;
 
             using var connection = new SQLiteConnection(PathHelper.DatabaseConnectionString);
             connection.Open();

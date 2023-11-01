@@ -14,17 +14,15 @@ namespace NFKApplication.Controllers
         [HttpGet("GetImage")]
         public IActionResult FetchImage(string imageUrl)
         {
-            var filePath = string.Empty;
-            var fileBytes = new byte[0];
             try
             {
-                filePath = new Uri(imageUrl).LocalPath;
-                fileBytes = System.IO.File.ReadAllBytes(filePath);
+                var filePath = new Uri(imageUrl).LocalPath;
+                var fileBytes = System.IO.File.ReadAllBytes(filePath);
                 return File(fileBytes, "image/jpeg");
             }
             catch (Exception ex)
             {
-                return BadRequest($"Fetching image at path {filePath} failed with reason {ex.Message}. Content: {Convert.ToBase64String(fileBytes)}");
+                return BadRequest($"Fetching image at path {imageUrl} failed with reason {ex.Message}. StackTrace: {ex.StackTrace}");
             }
         }
     }

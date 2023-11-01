@@ -30,7 +30,7 @@ namespace NFKApplication.Controllers
                 if (!_authService.TryValidate(info.Username, info.Password, out var message))
                 {
                     _logger.LogWarning($"Login attempt failed. {JsonSerializer.Serialize(info)} Message: {message}");
-                    return Unauthorized();
+                    return Unauthorized(message);
                 }
             }
             catch (Exception ex)

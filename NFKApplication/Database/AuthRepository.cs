@@ -50,7 +50,7 @@ namespace NFKApplication.Database
             var verified = HashHelper.Verify(password, user.Password);
             if(!verified)
             {
-                message = "Password was incorrect";
+                message = "Password was incorrect. Hint: The default admin password is the one with two animals and some numbers.. Check Jimmy's desk for a post-it note with the password.";
                 return false;
             }
 
