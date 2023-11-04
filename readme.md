@@ -16,6 +16,7 @@ Here are some ways to approach your exploration of the NFK Application:
 Imagine you're a bad actor intent on exploiting any vulnerability in the webshop.
 - Use the shop and monitor network requests, URLs, etc.
 - If you find something suspicious, dive into the code to investigate further.
+- Try to exploit anything you find.
 
 ### Whitebox Testing
 Approach the application as if you were conducting a secure code review.
