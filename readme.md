@@ -4,11 +4,13 @@ The NFK Application is a simple webshop that is deliberately vulnerable for educ
 
 It contains many types of vulnerabilities and weaknesses, and is aimed at the principles of the [OWASP Top 10 (2021)](https://owasp.org/www-project-top-ten/).
 
-🚨 **Please make sure your firewall is enabled.**
+🚨 **Please make sure your firewall is enabled.** or **Turn off your internet connection.**
 
 ---
 
 ## Getting Started
+
+You can run the application with IIS Express. 
 
 Here are some ways to approach your exploration of the NFK Application:
 
