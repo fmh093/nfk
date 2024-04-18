@@ -1,6 +1,5 @@
 using Dapper;
 using NFKApplication.Database;
-using System.Data.SQLite;
 using Microsoft.EntityFrameworkCore;
 using NFKApplication.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -8,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Serilog;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.Sqlite;
 
 namespace NFKApplication
 {
@@ -118,7 +118,7 @@ namespace NFKApplication
             // Comment the line below to reset the data in the database. Don't forget to re-add it once you've reset it.
             if (IsDatabaseInitialized()) return;
 
-            using var connection = new SQLiteConnection(PathHelper.DatabaseConnectionString);
+            using var connection = new SqliteConnection(PathHelper.DatabaseConnectionString);
             connection.Open();
 
 
@@ -138,13 +138,13 @@ namespace NFKApplication
 
                 INSERT INTO Configuration (Initialized) VALUES (1);";
 
-            using var cmd = new SQLiteCommand(initializeQuery, connection);
+            using var cmd = new SqliteCommand(initializeQuery, connection);
             cmd.ExecuteNonQuery();
         }
 
         private static bool IsDatabaseInitialized()
         {
-            using var connection = new SQLiteConnection(PathHelper.DatabaseConnectionString);
+            using var connection = new SqliteConnection(PathHelper.DatabaseConnectionString);
             connection.Open();
             var initialized = connection.Query<bool>("SELECT Initialized FROM Configuration WHERE Initialized = 1").FirstOrDefault();
             return initialized;
