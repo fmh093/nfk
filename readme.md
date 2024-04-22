@@ -4,6 +4,14 @@ The NFK Application is a simple webshop that is deliberately vulnerable for educ
 
 It contains many types of vulnerabilities and weaknesses, and is aimed at the principles of the [OWASP Top 10 (2021)](https://owasp.org/www-project-top-ten/).
 
+**Mac users**
+Checkout branch *mac*
+
+You will be prompted for your keychain password in order to install the certificate.
+
+You might also need to run the following command:
+dotnet dev-certs https --trust
+
 🚨 **Please make sure your firewall is enabled.** or **Turn off your internet connection.**
 
 ---
