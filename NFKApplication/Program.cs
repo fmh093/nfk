@@ -5,7 +5,6 @@ using NFKApplication.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Serilog;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 
@@ -29,10 +28,10 @@ namespace NFKApplication
                 .EnableSensitiveDataLogging()
             );
 
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.SQLite(PathHelper.DatabasePath)
-                .CreateLogger();
-            builder.Logging.AddSerilog();
+            //Log.Logger = new LoggerConfiguration()
+            //    .WriteTo.SQLite(PathHelper.DatabasePath)
+            //    .CreateLogger();
+            //builder.Logging.AddSerilog();
 
             builder.Services.AddSession(options =>
             {
